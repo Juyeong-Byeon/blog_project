@@ -1,0 +1,26 @@
+{
+  "name": "blog_project",
+  "version": "1.0.0",
+  "description": "React,koa,mongoDB등을 사용한 로그인과 CRUD가 가능한 블로그 프로젝트 입니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wndudqus/blog_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wndudqus/blog_project/issues"
+  },
+  "homepage": "https://github.com/wndudqus/blog_project#readme",
+  "dependencies": {
+    "eslint": "^6.8.0",
+    "koa": "^2.11.0",
+    "koa-router": "^8.0.8",
+    "prettier": "^1.19.1"
+  }
+}
