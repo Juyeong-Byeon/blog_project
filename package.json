@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/wndudqus/blog_project#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^8.0.8",
+    "mongoose": "^5.9.1",
     "prettier": "^1.19.1"
   }
 }
