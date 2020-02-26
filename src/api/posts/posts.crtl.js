@@ -3,13 +3,25 @@ const mongoose=require('mongoose');
 const Joi=require('joi');
 const {ObjectId}=mongoose.Types;
 
-exports.checkObjectId=(ctx,next)=>{
+exports.getPostById= async(ctx,next)=>{
     const {id}=ctx.params;
     if(!ObjectId.isValid(id)){
         ctx.status=400;
         return;
     }
-    return next();
+    try{
+        const post=await Post.findById(id);
+        if(!post){
+            ctx.status=404;
+            return;
+        }
+        ctx.state.post=post;
+        return next();
+
+    }catch(e){
+        ctx.throw(500,e);
+    }
+    
 };
 
 exports.write=async(ctx)=>{ //post 작성
@@ -31,6 +43,7 @@ exports.write=async(ctx)=>{ //post 작성
         title,
         body,
         tags,
+        user:ctx.state.user,
     });
     console.log(post);
     try{
@@ -50,15 +63,20 @@ exports.list= async (ctx)=>{//get 목록 조회
         ctx.status=400;
         return;
     }
+    const {tag,usename}=ctx.query;
+    const query={
+        ...(usename?{'user.username':username}:{}),
+        ...(tag?{tags:tag}:{}),
+    }
 
    try{
        const posts=await Post
-            .find()
+            .find(query)
                 .sort({_id:-1})
                     .limit(10)
                         .skip((page-1)*10)
                             .exec();
-        const postCount=await Post.countDocuments().exec();
+        const postCount=await Post.countDocuments(query).exec();
         ctx.set('Laxt-Page',Math.ceil(postCount/10));
        ctx.body=posts.map(post=>post.toJSON()).map(post=>({
            ...post,
@@ -72,19 +90,19 @@ exports.list= async (ctx)=>{//get 목록 조회
 };
 
 exports.read=async (ctx)=>{//get 특정 포스트 조회
-  const {id}=ctx.params;
-    try{
+//   const {id}=ctx.params;
+//     try{
 
-        const post= await Post.findById(id).exec();
-        if(!post){
-            ctx.status=404;
-            return;
-        }
-        ctx.body=post;
-  }catch(e){
-        ctx.throw(500,e);
-  }
-
+//         const post= await Post.findById(id).exec();
+//         if(!post){
+//             ctx.status=404;
+//             return;
+//         }
+//         ctx.body=post;
+//   }catch(e){
+//         ctx.throw(500,e);
+//   }
+    ctx.body=ctx.state.post;
 };
 
 exports.remove=async ctx=>{
@@ -133,6 +151,17 @@ exports.update=async ctx=>{
     }
     
 };
+
+exports.checkOwnPost=(ctx,next)=>{
+    console.log(ctx.state);
+    const{user,post}=ctx.state;
+    
+    if(post.user._id.toString()!==user._id){
+        ctx.status=403;
+        return;
+    }
+    return next();
+}
 
 
 
