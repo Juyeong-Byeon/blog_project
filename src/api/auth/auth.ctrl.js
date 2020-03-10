@@ -14,10 +14,11 @@ exports.register=async ctx=>{
     });
 
     const result=Joi.validate(ctx.request.body,schema);
+    console.log(ctx.request.body);
     if(result.error){
         ctx.status=400;
         ctx.body=result.error;
-        console.log('error!');
+        console.log('error!!!');
         return;
     }
     const {username,password}=ctx.request.body;

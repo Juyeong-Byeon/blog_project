@@ -27,6 +27,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^8.0.8",
     "mongoose": "^5.9.1",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "sanitize-html": "^1.22.0"
   }
 }
